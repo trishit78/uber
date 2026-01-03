@@ -26,8 +26,8 @@ export const signUpDriverService = async(signUpData:SignUpDriverDTO)=>{
 }
 
 
-export function comparePassword(userPassword:string,encryptedPassword:string){
-    return bcrypt.compare(userPassword,encryptedPassword);
+export async function comparePassword(userPassword:string,encryptedPassword:string){
+    return await bcrypt.compare(userPassword,encryptedPassword);
 }
 
 export const signInDriverService = async(signInData:SignInDTO)=>{
@@ -38,11 +38,11 @@ export const signInDriverService = async(signInData:SignInDTO)=>{
         }
         //console.log('hello',user)
 
-        const isPasswordMatching = comparePassword(signInData.password,user.password);
+        const isPasswordMatching =await comparePassword(signInData.password,user.password);
         if(!isPasswordMatching){
             throw new Error('Passwords did not matched');
         }
-        console.log('true',isPasswordMatching)
+       
         const userData = {id:user.id.toString(),email:user.email};
 
         const signInExpiry:Record<string,string> = {expiresIn:serverConfig.JWT_EXPIRY};

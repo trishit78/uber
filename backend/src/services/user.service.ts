@@ -22,8 +22,8 @@ export const signUpService = async(signUpData:SignUpDTO)=>{
 }
 
 
-export  function comparePassword(userPassword:string,encryptedPassword:string){
-    return  bcrypt.compare(userPassword,encryptedPassword);
+export async function comparePassword(userPassword:string,encryptedPassword:string){
+    return await bcrypt.compare(userPassword,encryptedPassword);
 }
 
 export const signInService = async(signInData:SignInDTO)=>{
@@ -32,9 +32,9 @@ export const signInService = async(signInData:SignInDTO)=>{
         if(!user){
             throw new Error('User not found with the given email');
         }
-        console.log('hello',user)
+        // console.log('hello',user)
 
-        const isPasswordMatching = comparePassword(signInData.password,user.password);
+        const isPasswordMatching =await comparePassword(signInData.password,user.password);
         if(!isPasswordMatching){
             throw new Error('Passwords did not matched');
         }
