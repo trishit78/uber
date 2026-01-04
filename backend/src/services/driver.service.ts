@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken'
 import { serverConfig } from "../config/index.js";
 import { getUserByEmail, signUpDriverRepo } from "../repositories/driver.repository.js";
+import type { updateLocationDTO } from "../dtos/location.dto.js";
+import { addDriverLocation } from "./location.service.js";
 
 export const signUpDriverService = async(signUpData:SignUpDriverDTO)=>{
     try {
@@ -11,7 +13,7 @@ export const signUpDriverService = async(signUpData:SignUpDriverDTO)=>{
         const hashedPassword = await bcrypt.hash(password,10);
         userData.password = hashedPassword
 
-        const user = await signUpDriverRepo(userData);
+        const user:any = await signUpDriverRepo(userData);
         if(!user){
             throw new Error('unable to create user');
         }
@@ -53,4 +55,28 @@ export const signInDriverService = async(signInData:SignInDTO)=>{
     } catch (error) {
     throw new Error('Error occured in signin service');
     }
+}
+
+
+export async function updateLocationService(updateLocationData:updateLocationDTO) {
+    
+    const lat =Number(updateLocationData.lat);
+    const long = Number(updateLocationData.long);
+
+    try{
+
+        const res = await addDriverLocation(updateLocationData.passengerId,lat,long);
+        return res;
+        // await updateDriverLocation(passengerId,{
+        //     type:'Point',
+        //     coordinates:[long,lat]
+        // })
+        
+    }catch(error:unknown){
+        if(error instanceof Error)
+        console.log('error ',error.message)
+    }
+
+    //console.log(latitude,longitude,passengerId,res);
+
 }

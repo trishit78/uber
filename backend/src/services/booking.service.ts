@@ -1,8 +1,9 @@
 import type { BookingServiceDataDTO } from "../dtos/booking.dto.js";
 import { createBookingRepo } from "../repositories/booking.repository.js";
-import { getDistanceTime } from "../utils/map.js";
+import { getAddressCoordinate, getDistanceTime } from "../utils/map.js";
 import { getFare } from "../utils/ride.js";
 import crypto from "crypto";
+import { findNearByDrivers } from "./location.service.js";
 
 function generateOtp(num: number) {
   const otp = crypto
@@ -40,3 +41,22 @@ export const createBookingService = async (
     throw new Error("error occured while creating a booking");
   }
 };
+
+
+
+export async function findNearByDriversService(location:string) {
+
+  const details = await getAddressCoordinate(location);
+  const longitude = details?.lng;
+  const  latitude = details?.ltd;
+  
+  
+
+  const nearByDrivers = await findNearByDrivers(
+    latitude,
+    longitude,
+    5
+  );
+
+  return nearByDrivers;
+}

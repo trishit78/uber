@@ -9,10 +9,7 @@ export const getAddressCoordinate = async(address:string)=>{
          const response = await axios.get(url);
         if (response.data.status === 'OK') {
             const location = response.data.results[0].geometry.location;
-             console.log({
-                ltd: location.lat,
-                lng: location.lng
-             })
+             
             return {
                 ltd: location.lat,
                 lng: location.lng
