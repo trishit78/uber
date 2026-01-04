@@ -32,6 +32,7 @@ export const getDistanceTime = async (origin:string,destination:string) => {
     if (!origin || !destination) {
         throw new Error('Origin and destination are required');
     }
+  
     const url = `${serverConfig.GOOGLE_MAPS_URL}/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&key=${serverConfig.GOOGLE_MAPS_API_KEY}`;
     
     try {
@@ -42,7 +43,6 @@ export const getDistanceTime = async (origin:string,destination:string) => {
             if (response.data.rows[0].elements[0].status === 'ZERO_RESULTS') {
                 throw new Error('No routes found');
             }
-
             return response.data.rows[0].elements[0];
         } else {
             throw new Error('Unable to fetch distance and time');
