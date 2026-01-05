@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
-import { signInDriverService, signUpDriverService, updateLocationService } from "../services/driver.service.js";
+import { assignDriverService, signInDriverService, signUpDriverService, updateLocationService } from "../services/driver.service.js";
 import { getAddressCoordinate } from "../utils/map.js";
+import axios from "axios";
+import { getNotifiedDrivers } from "../services/location.service.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -79,4 +81,38 @@ export const updateLocationHandler = async(req:Request,res:Response)=>{
             })
         }   
     }
+}
+
+
+export async function confirmBookingHandler(req:Request,res:Response) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
+      res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+      return;
+    }
+    const {bookingId} = req.body;
+
+    const booking = await assignDriverService(bookingId,authReq.user.id);
+    console.log(booking,bookingId);
+    const notifiedDriverIds = await getNotifiedDrivers(bookingId);
+    console.log('notified driver ids',notifiedDriverIds);
+    try {
+        const notificationResponse = await axios.post('http://localhost:3001/api/remove-ride-notification',{
+            rideId:bookingId,
+            driverIds:notifiedDriverIds
+        })
+        console.log('Successfully removed ride notifications',notificationResponse.data);
+
+    } catch (error) {
+        if(error instanceof Error)
+        console.log('error in driver controllers',error.message);
+    }
+
+
+     res.status(201)
+    .send({data:booking, success: true, error: null, message: "successfully confirmed booking"});
+
 }

@@ -238,7 +238,7 @@
             async function confirmRide(bookingId) {
                 
                 try {
-                    const response = await fetch('http://localhost:4000/api/driver/confirm', {
+                    const response = await fetch('http://localhost:3000/api/v1/driver/confirm', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

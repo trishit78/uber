@@ -5,6 +5,7 @@ import { serverConfig } from "../config/index.js";
 import { getUserByEmail, signUpDriverRepo } from "../repositories/driver.repository.js";
 import type { updateLocationDTO } from "../dtos/location.dto.js";
 import { addDriverLocation } from "./location.service.js";
+import { updateBookingStatus } from "../repositories/booking.repository.js";
 
 export const signUpDriverService = async(signUpData:SignUpDriverDTO)=>{
     try {
@@ -80,3 +81,15 @@ export async function updateLocationService(updateLocationData:updateLocationDTO
     //console.log(latitude,longitude,passengerId,res);
 
 }
+
+export async function assignDriverService(bookingId:string, driverId:number) {
+    console.log("Assigning driver:", bookingId, driverId);
+    
+    const booking = await updateBookingStatus(bookingId, driverId, 'confirmed'); 
+    
+    if (!booking) {
+      throw new Error('Booking already confirmed or does not exist');
+    }
+    return booking;
+  }
+  

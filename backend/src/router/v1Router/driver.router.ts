@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from 'express';
 import {  driverAuthRequest } from '../../middleware/auth.middleware.js';
-import { signInDriverHandler, signUpDriverHandler, updateLocationHandler } from '../../controllers/driver.controller.js';
+import { confirmBookingHandler, signInDriverHandler, signUpDriverHandler, updateLocationHandler } from '../../controllers/driver.controller.js';
 
 
 const driverRouter = express.Router();
@@ -13,7 +13,7 @@ driverRouter.get('/me',driverAuthRequest,(_req:Request,res:Response)=>{
     res.send('ok')
 });
 driverRouter.post('/location',driverAuthRequest,updateLocationHandler);
-
+driverRouter.post('/confirm',driverAuthRequest,confirmBookingHandler);
 export default driverRouter;
 
 

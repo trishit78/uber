@@ -52,15 +52,24 @@ export async function deleteBySocket(socketId: string) {
   redisClient.del(driverId);
 }
 
+export async function storedNotifiedDrivers(
+  bookingId: string,
+  driverIds: any[]
+) {
+  for (const driverId of driverIds) {
+    const addedCount = await redisClient.sAdd(
+      `notifiedDrivers:${bookingId}`,
+      driverId
+    );
+    console.log(
+      `Added driver ${driverId} to the set for booking ${bookingId}. result: ${addedCount}`
+    );
+  }
+}
 
-export async function storedNotifiedDrivers(bookingId:string,driverIds:any[]){
-        for (const driverId of driverIds){
-            const addedCount = await redisClient.sAdd(`notifiedDrivers:${bookingId}`,driverId);
-            console.log(`Added driver ${driverId} to the set for booking ${bookingId}. result: ${addedCount}` );
-        }
-    }
-
-export     async function getNotifiedDrivers(bookingId:string){
-        const nearByDrivers = await redisClient.sMembers(`notifiedDrivers:${bookingId}`);
-        return nearByDrivers;
-    }
+export async function getNotifiedDrivers(bookingId: string) {
+  const nearByDrivers = await redisClient.sMembers(
+    `notifiedDrivers:${bookingId}`
+  );
+  return nearByDrivers;
+}

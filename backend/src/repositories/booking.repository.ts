@@ -23,3 +23,12 @@ export const createBookingRepo = async(bookingData:BookingDataDTO)=>{
         throw new Error('Error occured while booking')
     }
 }
+
+
+export async function updateBookingStatus(bookingId:string, driverId:number, status:string) {
+    return Booking.findOneAndUpdate(
+      { _id: bookingId, status:'pending' },
+      { driver: driverId, status: 'confirmed' },
+      { new: true }
+    );
+  }
