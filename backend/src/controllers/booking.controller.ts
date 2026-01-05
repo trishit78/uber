@@ -27,9 +27,8 @@ export const createBooking = async (req: Request, res: Response) => {
 
     const response = await createBookingService(bookingData);
 
-    const nearbyDrivers = await findNearByDriversService(req.body.source);
 
-    console.log("nearby drivers", nearbyDrivers);
+    
 
     res.status(201).json({
       message: "Booking done successfully",
