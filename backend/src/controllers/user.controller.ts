@@ -24,7 +24,7 @@ export const signUpHandler = async(req:Request,res:Response)=>{
 export const signInHandler = async(req:Request,res:Response)=>{
     try {
         const response = await signInService(req.body);
-        res.status(201).json({
+        res.status(200).json({
             success:true,
             message:"User signed up successfully",
             data:response

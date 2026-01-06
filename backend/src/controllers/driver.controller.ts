@@ -33,7 +33,7 @@ export const signUpDriverHandler = async(req:Request,res:Response)=>{
 export const signInDriverHandler = async(req:Request,res:Response)=>{
     try {
         const response = await signInDriverService(req.body);
-        res.status(201).json({
+        res.status(200).json({
             success:true,
             message:"User signed in successfully",
             data:response

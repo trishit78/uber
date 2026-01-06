@@ -1,0 +1,59 @@
+// import React from 'react'; 
+
+// import { createContext, useState } from 'react';
+
+// // eslint-disable-next-line react-refresh/only-export-components
+// export const DriverDataContext = createContext();
+
+// const DriverContext = ({ children }) => {
+//     const [ driver, setDriver ] = useState(null);
+//     const [ isLoading, setIsLoading ] = useState(false);
+//     const [ error, setError ] = useState(null);
+
+//     const updateDriver = (driverData) => {
+//         setDriver(driverData);
+//     };
+
+//     const value = {
+//         driver,
+//         setDriver,
+//         isLoading,
+//         setIsLoading,
+//         error,
+//         setError,
+//         updateDriver
+//     };
+
+//     return (
+//         <DriverDataContext.Provider value={value}>
+//             {children}
+//         </DriverDataContext.Provider>
+//     );
+// };
+
+// export default DriverContext;
+
+
+import React, { createContext, useState } from 'react'
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const DriverDataContext = createContext()
+
+
+const DriverContext = ({ children }) => {
+
+   const [user, setUser] = useState({
+    email:'',
+    name:''
+   })
+
+    return (
+        <div>
+            <DriverDataContext.Provider value={[user, setUser]}>
+                {children}
+            </DriverDataContext.Provider>
+        </div>
+    )
+}
+
+export default DriverContext
