@@ -9,6 +9,8 @@ import Home from './pages/home'
 import UserLogout from './pages/Logout'
 import DriverHome from './pages/DriverHome'
 import AuthWrapper from './utils/authWrapper'
+import Riding from './pages/Riding'
+import DriverRiding from './pages/DriverRiding'
 
 
 const App = () => {
@@ -18,8 +20,10 @@ const App = () => {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<UserLogin />} />
         <Route path='/signup' element={<UserSignUp />} />
+         <Route path='/riding' element={<Riding />} />
         <Route path='/driver-login' element={<DriverLogin />} />
         <Route path='/driver-signup' element={<DriverSignUp />} />
+          <Route path='/driver-riding' element={<DriverRiding />} />
         <Route path='/home' element={
           <AuthWrapper>
             <Home />
