@@ -42,14 +42,14 @@ export const DriverDataContext = createContext()
 
 const DriverContext = ({ children }) => {
 
-   const [user, setUser] = useState({
+   const [driver, setDriver] = useState({
     email:'',
     name:''
    })
 
     return (
         <div>
-            <DriverDataContext.Provider value={[user, setUser]}>
+            <DriverDataContext.Provider value={[driver,setDriver]}>
                 {children}
             </DriverDataContext.Provider>
         </div>

@@ -22,7 +22,7 @@ const [_user,setUser] = useContext(UserDataContext);
     if(response.status==200){
         const data = response.data;
         setUser(data.user)
-        localStorage.setItem('token',data.token)
+        localStorage.setItem('token',data.data.token)
         navigate('/home');
     }
 
