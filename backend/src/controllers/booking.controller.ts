@@ -3,6 +3,8 @@ import {
   createBookingService,
   findNearByDriversService,
 } from "../services/booking.service.js";
+import { getFare } from "../utils/ride.js";
+import { getDistanceTime } from "../utils/map.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -45,3 +47,34 @@ export const createBooking = async (req: Request, res: Response) => {
     }
   }
 };
+
+
+export const getFareHandler = async(req:Request,res:Response)=>{
+  try {
+
+    const {pickup,destination} = req.query;
+
+     const sourceData = typeof pickup === 'string' ? pickup : '';
+     const destinationData = typeof destination === 'string' ? destination : '';
+
+    const distanceTime = await getDistanceTime(sourceData, destinationData);
+       // const distance = distanceTime.distance.value;
+        //const time: number = distanceTime.duration.value;
+        const fare: Record<string, number> = getFare(distanceTime);
+        console.log(fare)
+    res.status(200).json({
+      success:true,
+      message:"fare calculated successfully",
+      data:fare
+    })
+
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({
+        success: false,
+        message: "Internal server error",
+        data: error.message,
+      });
+    }
+  }
+}

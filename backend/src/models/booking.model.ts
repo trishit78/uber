@@ -46,7 +46,6 @@ const bookingSchema = new mongoose.Schema({
     otp: {
         type: String,
         select: false,
-        required: true,
     },
     vehicleType:{
         type:String,

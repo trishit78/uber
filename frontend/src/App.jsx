@@ -5,13 +5,12 @@ import UserLogin from './pages/userLogin'
 import UserSignUp from './pages/UserSignUp'
 import DriverLogin from './pages/DriverLogin'
 import DriverSignUp from './pages/DriverSignUp'
-import Home from './pages/home'
 import UserLogout from './pages/Logout'
 import DriverHome from './pages/DriverHome'
 import AuthWrapper from './utils/authWrapper'
 import Riding from './pages/Riding'
 import DriverRiding from './pages/DriverRiding'
-
+import Home from './pages/Home2'
 
 const App = () => {
   return (

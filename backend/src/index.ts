@@ -3,6 +3,7 @@ import { serverConfig } from './config/index.js';
 import cors from 'cors'
 import v1Router from './router/v1Router/index.js';
 import { connectDB } from './config/db.js';
+//import { getAutoCompleteSuggestions } from './utils/map.js';
 
 
 const app= express();

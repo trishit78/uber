@@ -56,12 +56,17 @@ export const getAutoCompleteSuggestions = async (input:string) => {
         throw new Error('query is required');
     }
 
+    //console.log('input',input.address)
     const url = `${serverConfig.GOOGLE_MAPS_URL}/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${serverConfig.GOOGLE_MAPS_API_KEY}`;
-
+    //console.log(url)
     try {
         const response = await axios.get(url);
         if (response.data.status === 'OK') {
-            return response.data.predictions.map((prediction:any) => prediction.description).filter((value: string) => value);
+            return response.data.predictions.map((prediction:any) => prediction.description).filter((value: string) =>{
+                //console.log(value);
+                return value
+            } 
+        );
         } else {
             throw new Error('Unable to fetch suggestions');
         }
