@@ -44,11 +44,11 @@ const DriverRiding = () => {
 
                 }}><i className="text-3xl text-gray-800 ri-arrow-up-wide-line"></i></h5>
                 <h4 className='text-xl font-semibold'>4 KM away</h4>
+                <Link to='/driver-home'>
                 <button className=' bg-green-600 text-white font-semibold p-3 px-10 rounded-lg'>Complete Ride</button>
+                </Link>
             </div>
-            {/* <div ref={finishRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-                <FinishRide setFinishRidePanel={setFinishRidePanel} />
-            </div> */}
+           
 
         </div>
     )

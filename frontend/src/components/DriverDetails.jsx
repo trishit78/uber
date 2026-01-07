@@ -4,16 +4,13 @@ import { DriverDataContext } from "../context/driverContext";
 const DriverDetails = () => {
   const driverData = useContext(DriverDataContext);
 
-  if (!driverData || !driverData[0]) {
+  if (!driverData || !driverData[0] || !driverData[0]._id) {
     return <div className="p-4 text-gray-500">Loading driver details...</div>;
   }
 
   const driver = driverData[0];
   const { name, status, vehicle, _id } = driver;
-  console.log('name',name);
-  console.log('status',status);
-  console.log('vehicle',vehicle);
-  console.log('_id',_id);
+  console.log('Driver loaded:', { name, status, vehicle, _id });
 
   const isActive = status === "active";
 
@@ -33,8 +30,7 @@ const DriverDetails = () => {
   onClick={() => {
     // FUTURE:
     // 1. Update status to "active"
-    // 2. Start location tracking
-    // 3. Send location to backend
+    // 2. Send location to backend
     console.log("Driver going ACTIVE, start location tracking");
   }}
   className={`text-xs px-4 py-1.5 rounded-full font-medium transition
@@ -55,17 +51,17 @@ const DriverDetails = () => {
       <div className="grid grid-cols-3 gap-4 mt-6 bg-gray-50 p-4 rounded-xl text-center">
         <div>
           <p className="text-sm text-gray-500">Vehicle Color</p>
-          <p className="text-lg font-medium capitalize">{vehicle.color}</p>
+          <p className="text-lg font-medium capitalize">{vehicle?.color}</p>
         </div>
 
         <div>
           <p className="text-sm text-gray-500">Plate Number</p>
-          <p className="text-lg font-medium">{vehicle.plate}</p>
+          <p className="text-lg font-medium">{vehicle?.plate}</p>
         </div>
 
         <div>
           <p className="text-sm text-gray-500">Capacity</p>
-          <p className="text-lg font-medium">{vehicle.capacity} Seats</p>
+          <p className="text-lg font-medium">{vehicle?.capacity} Seats</p>
         </div>
       </div>
     </div>
