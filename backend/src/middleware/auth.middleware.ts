@@ -1,33 +1,24 @@
 import type { NextFunction, Request, Response } from "express";
 import { serverConfig } from "../config/index.js";
 import jwt from 'jsonwebtoken'
-import { getUserById } from "../repositories/user.repositories.js";
+//import { getUserById } from "../repositories/user.repositories.js";
 import { getDriverById } from "../repositories/driver.repository.js";
 
 
 
-export async function isAuthenticated(token:string){
+export  function isAuthenticated(token:string){
     try {
         if(!token){
             throw new Error('missing jwt token');
         }
-
-        const response = jwt.verify(token,serverConfig.JWT_SECRET);
-        
-        if(!response){
+        console.log('isauth',token)
+        const response = jwt.verify(token,serverConfig.JWT_SECRET)as {id:string};
+        console.log('res',response)
+        if(!response?.id){
             throw new Error('Invalid token in payload');
         }
 
-        const user = await getUserById((response as any).id);
-     
-        
-        if(!user){
-            throw new Error('No user found');
-        }
-
-        return user._id
-
-
+        return response.id
 
     } catch (error:unknown) {
         if(error instanceof Error){
@@ -43,53 +34,51 @@ export async function isAuthenticated(token:string){
     }
 }
 
-export const authRequest = async(req:Request,res:Response,next:NextFunction)=>{
-    try {
-        const authHeader =req.headers.authorization;
-        if(!authHeader || !authHeader.startsWith('Bearer')){
-            res.status(401).json({
-                success:false,
-                message:"Invalid auth header"
-            })
-        };
-        
-        
-        const token = authHeader?.split(" ")[1];
-        
-        if(!token){
-            throw new Error("Bearer Token is missing")
-        }
-        
-        if(typeof token !== "string"){
-            res.status(401).json({
-                success:false,
-                message:"Missing or Invalid access token"
-            })
-        }
-        
-        const response =await isAuthenticated(token);
-        if(!response){
-            res.status(401).json({
-                success:false,
-                message:'Unauthorized'
-            })
-        };
 
-        req.user ={id:response};
-        next();
-
-
-    } catch (error) {
-        if(error instanceof Error){
-            res.status(401).json({
-                success:false,
-                message:'Unauthorized',
-                data:error.message
-            })
-        }
+export const authRequest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            success: false,
+            message: "Invalid auth header",
+        });
     }
-}
+    console.log('auth',authHeader)
 
+    const token = authHeader.split(" ")[1];
+console.log('token',token)
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Bearer token missing",
+      });
+    }
+    console.log('get token',token)
+    const userId =  isAuthenticated(token);
+    console.log('get userId',userId)
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    console.log('id',userId.toString())
+    req.user = { id: userId };
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+      data: error instanceof Error ? error.message : undefined,
+    });
+  }
+};
 export async function isDriverAuthenticated(token:string){
     try {
         if(!token){
@@ -159,7 +148,7 @@ export const driverAuthRequest = async(req:Request,res:Response,next:NextFunctio
             })
         };
 
-        req.user ={id:response};
+        req.user ={id:response.toString()};
         next();
 
 

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import type { SignUpDTO } from "../dtos/auth.dto.js";
 import { User } from "../models/user.model.js";
 
@@ -25,7 +26,14 @@ export const getUserByEmail = async(email:string)=>{
 
 export const getUserById = async(id:string)=>{
     try {
-        const user = await User.findById(id)
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid user id");
+    }
+
+    const objectId = new mongoose.Types.ObjectId(id);
+
+        const user = await User.findById(objectId);
+       
         return user;
     } catch (error) {
         throw new Error('error occured in signup repo')

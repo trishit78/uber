@@ -8,13 +8,14 @@ import { getDistanceTime } from "../utils/map.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: any;
   };
 }
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthenticatedRequest;
+    console.log('auth req',authReq)
     if (!authReq.user) {
       res.status(401).json({
         success: false,
@@ -26,6 +27,9 @@ export const createBooking = async (req: Request, res: Response) => {
       ...req.body,
       userId: authReq.user.id,
     };
+
+    console.log('fe data',bookingData);
+
 
     const response = await createBookingService(bookingData);
 

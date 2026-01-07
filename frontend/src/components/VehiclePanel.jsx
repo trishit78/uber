@@ -15,6 +15,7 @@ const VehiclePanel = (props) => {
             <h3 className='text-2xl font-semibold mb-5'>Choose a Vehicle</h3>
             <div onClick={()=>{
                 props.setConfirmRidePanel(true)
+                props.selectVehicle('car')
             }} className='flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src={car} alt="" />
                 <div className='ml-2 w-1/2'>
@@ -26,6 +27,7 @@ const VehiclePanel = (props) => {
             </div>
             <div onClick={()=>{
                 props.setConfirmRidePanel(true)
+                props.selectVehicle('bike')
             }} className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src={bike} alt="" />
                 <div className='-ml-2 w-1/2'>
@@ -37,6 +39,7 @@ const VehiclePanel = (props) => {
             </div>
             <div onClick={()=>{
                 props.setConfirmRidePanel(true)
+                props.selectVehicle('auto')
             }} className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src={auto} alt="" />
                 <div className='ml-2 w-1/2'>
