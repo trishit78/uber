@@ -23,7 +23,7 @@ const UserSignup = () => {
     const response = await axios.post(`http://localhost:3000/api/v1/user/signup`,newUser);
     if(response.status==201){
         const data = response.data;
-        setUser(data.user)
+        setUser(data.data.user)
         localStorage.setItem('token',data.data.token)
         navigate('/home');
     }

@@ -28,7 +28,18 @@ export const createBookingRepo = async(bookingData:BookingDataDTO)=>{
 export async function updateBookingStatus(bookingId:string, driverId:number, status:string) {
     return Booking.findOneAndUpdate(
       { _id: bookingId, status:'pending' },
-      { driver: driverId, status: 'confirmed' },
+      { driverId: driverId, status: 'accepted' }, 
       { new: true }
-    );
+    ).populate('driverId');
   }
+
+
+export async function getBookingDetailsById(bookingId:string) {
+    try {
+        const data = await Booking.findById(bookingId);
+        return data
+    } catch (error) {
+         console.log(error)
+        throw new Error('Error occured while fetching booking details')
+    }
+} 

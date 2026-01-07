@@ -19,10 +19,20 @@ const App = () => {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<UserLogin />} />
         <Route path='/signup' element={<UserSignUp />} />
-         <Route path='/riding' element={<Riding />} />
+         <Route path='/riding' element={
+          <AuthWrapper>
+            <Riding />
+          </AuthWrapper>
+          } />
+          <Route path='/driver-riding' element={
+            <AuthWrapper>
+
+            <DriverRiding />
+            </AuthWrapper>
+            
+            } />
         <Route path='/driver-login' element={<DriverLogin />} />
         <Route path='/driver-signup' element={<DriverSignUp />} />
-          <Route path='/driver-riding' element={<DriverRiding />} />
         <Route path='/home' element={
           <AuthWrapper>
             <Home />

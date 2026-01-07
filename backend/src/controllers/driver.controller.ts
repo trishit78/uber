@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
-import { assignDriverService, signInDriverService, signUpDriverService, updateLocationService } from "../services/driver.service.js";
+import { assignDriverService, getDriverByIdService, signInDriverService, signUpDriverService, updateLocationService } from "../services/driver.service.js";
 import { getAddressCoordinate } from "../utils/map.js";
 import axios from "axios";
 import { getNotifiedDrivers } from "../services/location.service.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    id: number;
+    id: any;
   };
 }
 
@@ -97,22 +97,50 @@ export async function confirmBookingHandler(req:Request,res:Response) {
 
     const booking = await assignDriverService(bookingId,authReq.user.id);
     console.log(booking,bookingId);
+
+    console.log('booking user id',booking)
     const notifiedDriverIds = await getNotifiedDrivers(bookingId);
     console.log('notified driver ids',notifiedDriverIds);
     try {
-        const notificationResponse = await axios.post('http://localhost:3001/api/remove-ride-notification',{
+        await axios.post('http://localhost:3001/api/remove-ride-notification',{
             rideId:bookingId,
             driverIds:notifiedDriverIds
         })
-        console.log('Successfully removed ride notifications',notificationResponse.data);
+        console.log('Successfully removed ride notifications');
+
+        // Notify Passenger
+        const passengerNotificationResponse = await axios.post('http://localhost:3001/api/notify-passenger', {
+            userId: booking.userId.toString(),
+            rideId: bookingId,
+            message: 'Your ride has been confirmed',
+            driverDetails: booking.driverId
+        });
+        console.log('Successfully notified passenger:', passengerNotificationResponse.data);
 
     } catch (error) {
         if(error instanceof Error)
-        console.log('error in driver controllers',error.message);
+            console.log('error in driver controllers notification flow',error.message);
     }
 
 
      res.status(201)
     .send({data:booking, success: true, error: null, message: "successfully confirmed booking"});
 
+}
+
+export const getDriverProfileHandler = async (req: Request, res: Response) => {
+    try {
+        
+        const driverId = (req as any).user.id;
+        const driver = await getDriverByIdService(driverId);
+        res.status(200).json({
+            success: true,
+            data: driver
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Error fetching profile'
+        });
+    }
 }

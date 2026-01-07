@@ -1,5 +1,5 @@
 import type { BookingServiceDataDTO } from "../dtos/booking.dto.js";
-import { createBookingRepo } from "../repositories/booking.repository.js";
+import { createBookingRepo, getBookingDetailsById } from "../repositories/booking.repository.js";
 import { getAddressCoordinate, getDistanceTime } from "../utils/map.js";
 import { getFare } from "../utils/ride.js";
 import crypto from "crypto";
@@ -85,4 +85,14 @@ export async function findNearByDriversService(location: string) {
   const nearByDrivers = await findNearByDrivers(latitude, longitude, 5);
 
   return nearByDrivers;
+}
+
+
+export async function getBookingDetailsService(bookingId:string) {
+ try {
+        const bookingData = await getBookingDetailsById(bookingId);
+        return bookingData;
+    } catch (error) {
+        throw new Error('Error occured in driver profile service');
+    }
 }

@@ -2,7 +2,7 @@ import type { SignInDTO, SignUpDriverDTO, SignUpDTO } from "../dtos/auth.dto.js"
 import bcrypt from "bcryptjs"; 
 import jwt from 'jsonwebtoken'
 import { serverConfig } from "../config/index.js";
-import { getUserByEmail, signUpDriverRepo } from "../repositories/driver.repository.js";
+import { getDriverById, getUserByEmail, signUpDriverRepo } from "../repositories/driver.repository.js";
 import type { updateLocationDTO } from "../dtos/location.dto.js";
 import { addDriverLocation } from "./location.service.js";
 import { updateBookingStatus } from "../repositories/booking.repository.js";
@@ -92,4 +92,14 @@ export async function assignDriverService(bookingId:string, driverId:number) {
     }
     return booking;
   }
+
+export const getDriverByIdService = async(id:string)=>{
+    try {
+        
+        const driver = await getDriverById(id);
+        return driver;
+    } catch (error) {
+        throw new Error('Error occured in driver profile service');
+    }
+}
   

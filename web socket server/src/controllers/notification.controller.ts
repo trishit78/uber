@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { io } from "../config/app.config.js";
 import { getDriverSocket } from "../services/driver.service.js";
+import { getUserSocket } from "../services/user.service.js";
 
 export async function notifyDriversHandler(req: Request, res: Response) {
   try {
@@ -116,3 +117,25 @@ export async function removeRideNotificationHandler(req:Request, res:Response) {
       });
     }
 };
+
+export async function notifyPassengerHandler(req: Request, res: Response) {
+    try {
+        const { userId, rideId, message, driverDetails } = req.body;
+        console.log(`Attempting to notify passenger ${userId} for ride ${rideId}`);
+        
+        const socketId = await getUserSocket(userId);
+
+        if (socketId) {
+            console.log(`Socket found for passenger ${userId}: ${socketId}`);
+            io.to(socketId).emit("ride-confirmed", { rideId, message, driverDetails });
+            res.status(200).send({ success: true, message: "Passenger notified" });
+        } else {
+            console.warn(`Passenger socket NOT found for userId: ${userId}`);
+            res.status(404).send({ success: false, message: "Passenger socket not found" });
+        }
+    } catch (error) {
+        console.error('Error in notifyPassengerHandler:', error);
+        if (error instanceof Error)
+            res.status(500).send({ success: false, error: error.message });
+    }
+}

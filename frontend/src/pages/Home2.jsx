@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -8,6 +8,9 @@ import ConfirmRide from "../components/ConfirmRidePanel";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import axios from "axios";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -23,7 +26,7 @@ const Home = () => {
   const waitingForDriverRef = useRef(null);
 
   const [vehicleFound, setVehicleFound] = useState(false);
-  const [waitingForDriver, _setWaitingForDriver] = useState(false);
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
 
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
 
@@ -35,6 +38,57 @@ const Home = () => {
 
   const [vehicleType,setVehicleType] = useState(null);
   const debounceRef = useRef(null);
+
+  const { socket } = useContext(SocketContext);
+  const [ user, setUser ] = useContext(UserDataContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token && (!user || !user._id)) {
+                const response = await axios.get('http://localhost:3000/api/v1/user/me', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (response.data.success) {
+                  console.log('fetch user data',response.data.data)
+                    setUser(response.data.data);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+            localStorage.removeItem('token');
+            navigate('/login');
+        }
+    };
+    fetchUser();
+  }, [user, setUser, navigate]);
+
+  useEffect(() => {
+    if (user?._id && socket) {
+        console.log('User joining socket:', user._id);
+        socket.emit('join', { userId: user._id, userType: 'user' });
+    }
+  }, [user, socket]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('ride-confirmed', (ride) => {
+        setVehicleFound(false);
+        setWaitingForDriver(true);
+        console.log('last use effect called',ride)
+navigate("/riding", {
+      state: { ride }
+    });
+
+    });
+
+    return () => socket.off('ride-confirmed');
+  }, [navigate,socket]);
 
   const handlePickupChange = (e) => {
     const value = e.target.value;
@@ -318,12 +372,12 @@ const Home = () => {
         vehicleType={vehicleType}
         setVehicleFound={setVehicleFound} />
       </div>
-      <div
+      {/* <div
         ref={waitingForDriverRef}
         className="fixed w-full z-10 bottom-0  bg-white px-3 py-6 pt-12"
       >
         <WaitingForDriver waitingForDriver={waitingForDriver} />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import type { SignInDTO, SignUpDTO } from "../dtos/auth.dto.js";
 import bcrypt from "bcryptjs"; 
 import jwt from 'jsonwebtoken'
-import { getUserByEmail, signUpRepo } from "../repositories/user.repositories.js";
+import { getUserByEmail, getUserById, signUpRepo } from "../repositories/user.repositories.js";
 import { serverConfig } from "../config/index.js";
 
 export const signUpService = async(signUpData:SignUpDTO)=>{
@@ -48,5 +48,15 @@ export const signInService = async(signInData:SignInDTO)=>{
         return {token,user}
     } catch (error) {
     throw new Error('Error occured in signin service');
+    }
+}
+
+export const getUserByIdService = async(id:string)=>{
+    try {
+       
+        const user = await getUserById(id);
+        return user;
+    } catch (error) {
+        throw new Error('Error occured in user profile service');
     }
 }

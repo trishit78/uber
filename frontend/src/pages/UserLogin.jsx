@@ -21,7 +21,7 @@ const [_user,setUser] = useContext(UserDataContext);
     const response = await axios.post(`http://localhost:3000/api/v1/user/signin`,existingUser);
     if(response.status==200){
         const data = response.data;
-        setUser(data.user)
+        setUser(data.data.user)
         localStorage.setItem('token',data.data.token)
         navigate('/home');
     }

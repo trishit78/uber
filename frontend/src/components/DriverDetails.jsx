@@ -1,38 +1,75 @@
-import React from 'react'
+import React, { useContext } from "react";
+import { DriverDataContext } from "../context/driverContext";
 
 const DriverDetails = () => {
+  const driverData = useContext(DriverDataContext);
+
+  if (!driverData || !driverData[0]) {
+    return <div className="p-4 text-gray-500">Loading driver details...</div>;
+  }
+
+  const driver = driverData[0];
+  const { name, status, vehicle, _id } = driver;
+  console.log('name',name);
+  console.log('status',status);
+  console.log('vehicle',vehicle);
+  console.log('_id',_id);
+
+  const isActive = status === "active";
+
   return (
-    <div>
-        <div className='flex items-center justify-between'>
-                    <div className='flex items-center justify-start gap-3'>
-                        <img className='h-10 w-10 rounded-full object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" alt="" />
-                        <h4 className='text-lg font-medium'>Harsh Patel</h4>
-                    </div>
-                    <div>
-                        <h4 className='text-xl font-semibold'>₹295.20</h4>
-                        <p className='text-sm text-gray-600'>Earned</p>
-                    </div>
-                </div>
-                <div className='flex p-3 mt-8 bg-gray-100 rounded-xl justify-center gap-5 items-start'>
-                    <div className='text-center'>
-                        <i className="text-3xl mb-2 font-thin ri-timer-2-line"></i>
-                        <h5 className='text-lg font-medium'>10.2</h5>
-                        <p className='text-sm text-gray-600'>Hours Online</p>
-                    </div>
-                    <div className='text-center'>
-                        <i className="text-3xl mb-2 font-thin ri-speed-up-line"></i>
-                        <h5 className='text-lg font-medium'>10.2</h5>
-                        <p className='text-sm text-gray-600'>Hours Online</p>
-                    </div>
-                    <div className='text-center'>
-                        <i className="text-3xl mb-2 font-thin ri-booklet-line"></i>
-                        <h5 className='text-lg font-medium'>10.2</h5>
-                        <p className='text-sm text-gray-600'>Hours Online</p>
-                    </div>
+    <div className="bg-white rounded-2xl shadow-sm p-5 w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <img
+            className="h-12 w-12 rounded-full border object-cover"
+            src={`https://robohash.org/${_id}`}
+            alt={name}
+          />
+          <div>
+            <h4 className="text-lg font-semibold">{name}</h4>
+           <button
+  onClick={() => {
+    // FUTURE:
+    // 1. Update status to "active"
+    // 2. Start location tracking
+    // 3. Send location to backend
+    console.log("Driver going ACTIVE, start location tracking");
+  }}
+  className={`text-xs px-4 py-1.5 rounded-full font-medium transition
+    ${
+      isActive
+        ? "bg-green-600 text-white cursor-not-allowed"
+        : "bg-red-100 text-red-700 hover:bg-red-200"
+    }
+  `}
+>
+  {isActive ? "GO OFFLINE" : "GO ONLINE"}
+</button>
+          </div>
+        </div>
+      </div>
 
-                </div>
+      {/* Vehicle Info */}
+      <div className="grid grid-cols-3 gap-4 mt-6 bg-gray-50 p-4 rounded-xl text-center">
+        <div>
+          <p className="text-sm text-gray-500">Vehicle Color</p>
+          <p className="text-lg font-medium capitalize">{vehicle.color}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500">Plate Number</p>
+          <p className="text-lg font-medium">{vehicle.plate}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500">Capacity</p>
+          <p className="text-lg font-medium">{vehicle.capacity} Seats</p>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default DriverDetails
+export default DriverDetails;

@@ -23,7 +23,7 @@ const DriverLogin = () => {
     );
     if (response.status == 200) {
       const data = response.data;
-      setDriver(data.user);
+      setDriver(data.data.user);
       localStorage.setItem("token", data.data.token);
       navigate("/driver-home");
     }

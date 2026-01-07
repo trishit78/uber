@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   createBookingService,
   findNearByDriversService,
+  getBookingDetailsService,
 } from "../services/booking.service.js";
 import { getFare } from "../utils/ride.js";
 import { getDistanceTime } from "../utils/map.js";
@@ -81,4 +82,27 @@ export const getFareHandler = async(req:Request,res:Response)=>{
       });
     }
   }
+}
+
+export const getBookingDetails = async(req:Request,res:Response)=>{
+  try {
+    const {id} = req.params;
+    if(!id){
+      throw new Error('booking id not found')
+    }
+    const response = await getBookingDetailsService(id);
+    res.status(200).json({
+      success:true,
+      message:"Fetched Booking Details Successfully",
+      data:response
+    })
+  } catch (error) {
+     if (error instanceof Error) {
+      res.status(400).json({
+        success: false,
+        message: "Internal server error",
+        data: error.message,
+      });
+  }
+}
 }
