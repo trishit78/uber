@@ -7,6 +7,8 @@ type ServerConfig = {
     JWT_EXPIRY:string
     GOOGLE_MAPS_API_KEY:string
     GOOGLE_MAPS_URL:string
+    RAZORPAY_SECRET_KEY:string
+    RAZORPAY_API_KEY:string
 };
 
 
@@ -23,5 +25,7 @@ export const serverConfig:ServerConfig={
     JWT_EXPIRY:process.env.JWT_EXPIRY|| '1d',
     GOOGLE_MAPS_API_KEY:process.env.GOOGLE_MAPS_API_KEY|| '',
     GOOGLE_MAPS_URL:process.env.GOOGLE_MAPS_URL|| '',
+    RAZORPAY_SECRET_KEY:process.env.RAZORPAY_SECRET_KEY|| '',
+    RAZORPAY_API_KEY:process.env.RAZORPAY_API_KEY|| '',
 
 }

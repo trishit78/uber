@@ -11,10 +11,12 @@ import AuthWrapper from './utils/authWrapper'
 import Riding from './pages/Riding'
 import DriverRiding from './pages/DriverRiding'
 import Home from './pages/Home2'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   return (
     <div>
+      <Toaster position="top-right" reverseOrder={false} />
     <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<UserLogin />} />
