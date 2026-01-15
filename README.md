@@ -5,11 +5,16 @@ A full-stack ride-sharing application built with the MERN stack, featuring real-
 ## 📹 Demo
 
 <!-- Add project demo video/gif here -->
-![Demo](./demo.gif)
 
 
-https://github.com/user-attachments/assets/e1c7577f-93b1-434a-aacf-16cd80ea7bc1
+https://github.com/user-attachments/assets/f2890fec-be02-43db-93a7-fb539719a228
 
+
+---
+
+
+## Project Architecture
+<img width="1570" height="851" alt="uber design" src="https://github.com/user-attachments/assets/46480054-ce53-41f2-a958-ff181e3e2cb1" />
 
 ---
 
